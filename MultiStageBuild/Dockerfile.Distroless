@@ -1,0 +1,28 @@
+# Stage 1: Build the application
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy the project file first for caching.
+COPY WebApp.csproj .
+
+# Restore dependencies for the specific Linux runtime.
+RUN dotnet restore --runtime linux-x64
+
+# Copy the rest of the code.
+COPY . .
+
+# Publish the application for the specific runtime.
+RUN dotnet publish "WebApp.csproj" -c Release -o /app/publish --runtime linux-x64 --self-contained false
+
+# Stage 2: Create the final, smallest possible runtime image
+# Use the Google-provided distroless image with .NET runtime dependencies.
+FROM mcr.microsoft.com/dotnet/runtime-deps:8.0-cbl-mariner2.0 AS final
+WORKDIR /app
+EXPOSE 80
+
+# Copy the published application from the 'build' stage.
+COPY --from=build /app/publish .
+
+# Define the command to run the application.
+# The entry point must use the full path in a distroless image, as there is no shell.
+ENTRYPOINT ["/usr/bin/dotnet", "WebApp.dll"]

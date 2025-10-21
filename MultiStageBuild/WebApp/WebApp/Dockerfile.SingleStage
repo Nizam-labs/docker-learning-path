@@ -1,0 +1,22 @@
+# Use the full .NET SDK image for building and running.
+# The `sdk` image includes the runtime, so it can do both jobs.
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS final
+
+WORKDIR /app
+
+# Copy the project files and restore dependencies.
+# The .csproj file is copied first to leverage Docker's layer caching.
+COPY WebApp.csproj ./
+RUN dotnet restore
+
+# Copy the rest of the application code.
+COPY . .
+
+# Build the application in Release mode.
+RUN dotnet publish "WebApp.csproj" -c Release -o /app/publish
+
+# Expose port 80 to enable communication with the web app.
+EXPOSE 80
+
+# Define the command to run the application.
+ENTRYPOINT ["dotnet", "WebApp.dll"]

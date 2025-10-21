@@ -1,0 +1,28 @@
+# Stage 1: Build the application
+# Use the full .NET SDK image for building.
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Copy the project file first for caching.
+COPY WebApp.csproj .
+RUN dotnet restore
+
+# Copy the rest of the application code.
+COPY . .
+
+# Publish the application.
+RUN dotnet publish -c Release -o /app/publish
+
+# Stage 2: Create the final, smaller runtime image
+# Use the ASP.NET Core runtime image.
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS final
+WORKDIR /app
+
+# Copy the published application from the 'build' stage.
+COPY --from=build /app/publish .
+
+# Expose port 80.
+EXPOSE 80
+
+# Define the command to run the application.
+ENTRYPOINT ["dotnet", "WebApp.dll"]
