@@ -42,14 +42,13 @@ Docker networking facilitates communication between Docker containers, the Docke
 - Containers within the same user-defined network can communicate by service name.
 - To allow external access to a container's services, ports must be "published" or "exposed" from the container to the host using the -p or --publish flag during container creation or in a docker-compose.yml file.
 
-Example of Creating a User-Defined Bridge Network:
+**Example of Creating a User-Defined Bridge Network:**
 
-Code
-
+```Code
 docker network create my_custom_network
+```
+**Example of Running a Container on a User-Defined Network:**
 
-Example of Running a Container on a User-Defined Network:
-
-Code
-
+```Code
 docker run -d --name my_app --network my_custom_network my_image
+```
