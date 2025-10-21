@@ -14,9 +14,18 @@ A Docker volume is a storage location managed by Docker that exists outside the 
 
 Docker containers lose data when they are deleted because their filesystem is temporary. To overcome this, Docker volumes store data on the host's filesystem, ensuring it persists even if the container is removed or replaced.
 
+![docker volume image-1](https://github.com/Nizam-labs/docker-learning-path/blob/main/images/docker-volume.png)
+
+![docker volume image-1](https://github.com/Nizam-labs/docker-learning-path/blob/main/images/docker-volume2.png)
+
 Using docker volumes, we can persist the data in the database
 
+![docker volume image-1](https://github.com/Nizam-labs/docker-learning-path/blob/main/images/docker-volume-db.png)
+
 Using docker volumes, the data can be shared across multiple containers.
+
+![docker volume image-1](https://github.com/Nizam-labs/docker-learning-path/blob/main/images/docker-volume-cont.png)
+
 
 **🛠️ Creating and Using Volumes**
 
@@ -54,4 +63,5 @@ docker volume rm my-volume
 - Use named volumes for clarity and reusability.
 - Avoid storing sensitive data directly in containers.
 - Use volume drivers for advanced use cases (e.g., cloud storage).
+
 - Clean up unused volumes with docker volume prune.
